@@ -1,0 +1,44 @@
+﻿<div class="modal-background" *ngIf="active">
+  <div class="modal-content">
+    <h2 class="modal-title">Thêm mới nhân viên</h2>
+    <div *ngIf="modalForm.invalid" class="error-message">
+      Vui lòng nhập thông tin phù hợp.
+    </div>
+    <form [formGroup]="modalForm" (ngSubmit)="save()">
+      <label for="code">Mã:</label>
+      <input type="text" formControlName="Code">
+
+      <label for="name">Tên:</label>
+      <input type="text" formControlName="Name">
+
+      <label for="birthDate">Ngày sinh:</label>
+      <input type="date" formControlName="BirthDate">
+
+      <label for="gender">Giới tính:</label>
+      <select formControlName="Gender">
+        <option value="Nam">Nam</option>
+        <option value="Nữ">Nữ</option>
+        <option value="Khác">Khác</option>
+      </select>
+
+      <label for="mobile">Di động:</label>
+      <input type="text" formControlName="Mobile">
+
+      <label for="email">Email:</label>
+      <input type="email" formControlName="Email">
+
+      <label for="address">Địa chỉ:</label>
+      <input type="text" formControlName="Address">
+
+      <label for="firstWorkingDate">Ngày vào làm việc:</label>
+      <input type="date" formControlName="FirstWorkingDate">
+
+      <label for="resignDate">Ngày nghỉ việc:</label>
+      <input type="date" formControlName="ResignDate">
+      <div class="modal-buttons">
+        <button type="button" (click)="close()">Đóng</button>
+        <button *ngIf="!modalForm.invalid" type="submit">Thêm</button>
+      </div>
+    </form>
+  </div>
+</div>

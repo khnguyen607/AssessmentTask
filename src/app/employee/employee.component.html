@@ -1,0 +1,48 @@
+<button type="button" class="custom-button" (click)="createEmployee()">Thêm nhân viên</button>
+<table>
+    <thead>
+        <tr>
+            <th>Mã</th>
+            <th>Họ và tên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Di động</th>
+            <th>Email</th>
+            <th>Địa chỉ</th>
+            <th>Ngày vào làm</th>
+            <th>Ngày nghỉ việc</th>
+        </tr>
+    </thead>
+    <tbody id="employee-list">
+        <tr *ngFor="let employee of employees">
+            <td>{{ employee.Code }}</td>
+            <td>{{ employee.Name }}</td>
+            <td>{{ employee.BirthDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ employee.GenderName }}</td>
+            <td>{{ employee.Mobile }}</td>
+            <td>{{ employee.Email }}</td>
+            <td>{{ employee.Address }}</td>
+            <td>{{ employee.FirstWorkingDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ employee.ResignDate | date:'dd/MM/yyyy' }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div id="addEmployeeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Thêm mới nhân viên</h5>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Thêm form thêm mới nhân viên tại đây -->
+        </div>
+        <div class="modal-footer">
+            <button class="modal-close btn btn-secondary">Đóng</button>
+            <button class="modal-close btn btn-primary">Thêm mới</button>
+        </div>
+    </div>
+</div>
+
+<createEmployeeModal #createEmployeeModal (modalSave)="onModalSave($event)"></createEmployeeModal>
