@@ -24,11 +24,12 @@ export class CreateEmployeeModalComponent implements OnInit {
         var formData = new EmployeeDto(this.modalForm.value);
         this.modalSave.emit(formData);
         this.active = false;
+        this.modalForm.reset();
     }
 
     close(): void {
-        // this.active = false;
-        console.log(this.modalForm.errors);
+        this.active = false;
+        // console.log(this.modalForm.errors);
     }
 
     ngOnInit(): void {
