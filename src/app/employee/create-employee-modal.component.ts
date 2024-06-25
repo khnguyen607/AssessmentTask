@@ -29,7 +29,6 @@ export class CreateEmployeeModalComponent implements OnInit {
     close(): void {
         // this.active = false;
         console.log(this.modalForm.errors);
-        
     }
 
     ngOnInit(): void {
