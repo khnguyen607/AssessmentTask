@@ -1,6 +1,6 @@
 ﻿import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { EmployeeDto } from '../services/service-proxies';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
     selector: 'createEmployeeModal',
@@ -21,10 +21,33 @@ export class CreateEmployeeModalComponent implements OnInit {
     }
 
     save(): void {
-        var formData = new EmployeeDto(this.modalForm.value);
-        this.modalSave.emit(formData);
-        this.active = false;
-        this.modalForm.reset();
+        if (this.modalForm.valid) {
+            var formData = new EmployeeDto(this.modalForm.value);
+            this.modalSave.emit(formData);
+            this.active = false;
+            this.modalForm.reset();
+        } else {
+            alert('Vui lòng nhập thông tin phù hợp.')
+            this.modalForm.markAllAsTouched();
+
+            // Log các trường chưa hợp lệ
+            Object.keys(this.modalForm.controls).forEach(field => {
+                const control = this.modalForm.get(field);
+                if (control instanceof FormGroup) {
+                    Object.keys(control.controls).forEach(innerField => {
+                        const innerControl = control.get(innerField);
+                        if (innerControl && innerControl.invalid) {
+                            console.log(`${field}.${innerField} chưa hợp lệ.`);
+                        }
+                    });
+                } else {
+                    if (control && control.invalid) {
+                        console.log(`${field} chưa hợp lệ.`);
+                    }
+                }
+            });
+
+        }
     }
 
     close(): void {
@@ -43,26 +66,26 @@ export class CreateEmployeeModalComponent implements OnInit {
             Address: ['', Validators.required],
             FirstWorkingDate: ['', Validators.required],
             ResignDate: ['']
-        }, { validators: this.endDateValidator });
+        });
+
+        this.modalForm.get('FirstWorkingDate')?.valueChanges.subscribe(() => {
+            this.modalForm.get('ResignDate')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        });
+        this.modalForm.get('ResignDate')?.valueChanges.subscribe(() => {
+            this.modalForm.get('FirstWorkingDate')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+        });
+        this.modalForm.get('ResignDate')?.setValidators(this.endDateValidator(this.modalForm.get('FirstWorkingDate')));
     }
 
-    endDateValidator(formGroup: FormGroup) {
-
-        const FirstWorkingDate = formGroup.get('FirstWorkingDate');
-        const ResignDate = formGroup.get('ResignDate');
-
-        if (!ResignDate || !FirstWorkingDate) {
+    endDateValidator(compareControl: AbstractControl | null): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            if (!compareControl) return null;
+            const startDate = compareControl.value;
+            const endDate = control.value;
+            if (endDate && startDate && endDate <= startDate) {
+                return { 'invalidEndDate': true };
+            }
             return null;
-        }
-
-        const startDate = FirstWorkingDate.value;
-        const endDate = ResignDate.value;
-        console.log(startDate);
-
-        if (!endDate || !startDate) {
-            return null;
-        }
-
-        return (endDate > startDate) ? null : { 'invalidEndDate': true };
+        };
     }
 }

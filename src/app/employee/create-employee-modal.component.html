@@ -1,18 +1,31 @@
 ﻿<div class="modal-background" *ngIf="active">
   <div class="modal-content">
     <h2 class="modal-title">Thêm mới nhân viên</h2>
-    <div *ngIf="modalForm.invalid" class="error-message">
+    <!-- <div *ngIf="modalForm.invalid" class="error-message">
       Vui lòng nhập thông tin phù hợp.
-    </div>
+    </div> -->
     <form [formGroup]="modalForm" (ngSubmit)="save()">
       <label for="code">Mã:</label>
       <input type="text" formControlName="Code">
+      <div *ngIf="modalForm.get('Code')?.invalid && (modalForm.get('Code')?.dirty || modalForm.get('Code')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('Code')?.errors?.['required']">Mã nhân viên là bắt buộc</small>
+      </div>
 
       <label for="name">Tên:</label>
       <input type="text" formControlName="Name">
+      <div *ngIf="modalForm.get('Name')?.invalid && (modalForm.get('Name')?.dirty || modalForm.get('Name')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('Name')?.errors?.['required']">Tên nhân viên là bắt buộc</small>
+      </div>
 
       <label for="birthDate">Ngày sinh:</label>
       <input type="date" formControlName="BirthDate">
+      <div
+        *ngIf="modalForm.get('BirthDate')?.invalid && (modalForm.get('BirthDate')?.dirty || modalForm.get('BirthDate')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('BirthDate')?.errors?.['required']">Ngày sinh là bắt buộc</small>
+      </div>
 
       <label for="gender">Giới tính:</label>
       <select formControlName="Gender">
@@ -20,24 +33,59 @@
         <option value="Nữ">Nữ</option>
         <option value="Khác">Khác</option>
       </select>
+      <div
+        *ngIf="modalForm.get('Gender')?.invalid && (modalForm.get('Gender')?.dirty || modalForm.get('Gender')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('Gender')?.errors?.['required']">Giới tính là bắt buộc</small>
+      </div>
 
       <label for="mobile">Di động:</label>
       <input type="text" formControlName="Mobile">
+      <div
+        *ngIf="modalForm.get('Mobile')?.invalid && (modalForm.get('Mobile')?.dirty || modalForm.get('Mobile')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('Mobile')?.errors?.['required']">Di động là bắt buộc</small>
+        <small *ngIf="modalForm.get('Mobile')?.errors?.['pattern']">Chỉ được là số</small>
+        <small *ngIf="modalForm.get('Mobile')?.errors?.['minlength']">Phải có ít nhât 10 số</small>
+        <small *ngIf="modalForm.get('Mobile')?.errors?.['maxlength']">Nhiều nhất là 11 số</small>
+      </div>
 
       <label for="email">Email:</label>
       <input type="email" formControlName="Email">
+      <div *ngIf="modalForm.get('Email')?.invalid && (modalForm.get('Email')?.dirty || modalForm.get('Email')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('Email')?.errors?.['required']">Email là bắt buộc</small>
+        <small *ngIf="modalForm.get('Email')?.errors?.['email']">Email không phù hợp</small>
+      </div>
 
       <label for="address">Địa chỉ:</label>
       <input type="text" formControlName="Address">
+      <div
+        *ngIf="modalForm.get('Address')?.invalid && (modalForm.get('Address')?.dirty || modalForm.get('Address')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('Address')?.errors?.['required']">Địa chỉ là bắt buộc</small>
+      </div>
 
       <label for="firstWorkingDate">Ngày vào làm việc:</label>
       <input type="date" formControlName="FirstWorkingDate">
+      <div
+        *ngIf="modalForm.get('FirstWorkingDate')?.invalid && (modalForm.get('FirstWorkingDate')?.dirty || modalForm.get('FirstWorkingDate')?.touched)"
+        class="error-message">
+        <small *ngIf="modalForm.get('FirstWorkingDate')?.errors?.['required']">Ngày vào làm việc là bắt buộc</small>
+      </div>
 
       <label for="resignDate">Ngày nghỉ việc:</label>
       <input type="date" formControlName="ResignDate">
+      <div
+        *ngIf="modalForm.get('ResignDate')?.hasError('invalidEndDate') && (modalForm.get('ResignDate')?.dirty || modalForm.get('ResignDate')?.touched)"
+        class="error-message">
+        <small>Ngày nghỉ cần phải lớn hơn ngày vào làm việc</small>
+      </div>
+
+
       <div class="modal-buttons">
         <button type="button" (click)="close()">Đóng</button>
-        <button *ngIf="!modalForm.invalid" type="submit">Thêm</button>
+        <button type="submit">Thêm</button>
       </div>
     </form>
   </div>

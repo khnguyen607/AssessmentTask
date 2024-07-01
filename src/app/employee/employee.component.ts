@@ -11,19 +11,12 @@ import { Subscription } from 'rxjs';
 export class EmployeeComponent implements OnInit, OnDestroy {
   @ViewChild('createEmployeeModal', { static: true }) createEmployeeModal!: CreateEmployeeModalComponent;
   employees!: EmployeeDto[];
-  private subscription: Subscription;
+  private subscription: Subscription = new Subscription();
 
-  constructor(private _employeesServiceProxy: EmployeesServiceProxy) {
-    this.subscription = new Subscription();
-  }
+  constructor(private _employeesServiceProxy: EmployeesServiceProxy) {}
 
   ngOnInit(): void {
-    this.subscription.add(
-      this._employeesServiceProxy.getEmployees().subscribe(data => {
-        this.employees = data;
-        console.log(this.employees);
-      })
-    );
+    this.getEmployee();
   }
 
   ngOnDestroy(): void {
@@ -36,16 +29,18 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   getEmployee(): void {
     this.subscription.add(
-      this._employeesServiceProxy.getEmployees().subscribe(data => {
-        this.employees = data;
+      this._employeesServiceProxy.getEmployees().subscribe({
+        next: (data) => {
+          this.employees = data;
+        },
+        error: (err) => {
+          console.error('Error fetching employees', err);
+        }
       })
     );
   }
 
   onModalSave(formData: EmployeeDto) {
-    console.log("Modal đã gửi dữ liệu:", formData);
     this.employees.push(formData);
-    console.log(this.employees);
   }
 }
-
