@@ -15,6 +15,7 @@
 
 /* Header styles */
 .header {
+    flex: 0 0 auto;
     background-color: #5AB2FF;
     color: #fff;
     padding: 1.5rem;
@@ -25,7 +26,7 @@
 
 /* Content styles */
 .content {
-    flex-grow: 1;
+    flex: 1 0 auto;
     padding: 2rem 1rem;
     background-color: #fff;
     font-family: 'Open Sans', sans-serif;
@@ -33,6 +34,7 @@
 
 /* Footer styles */
 .footer {
+    flex: 0 0 auto;
     background-color: #5AB2FF;
     color: #fff;
     padding: 1.5rem;
